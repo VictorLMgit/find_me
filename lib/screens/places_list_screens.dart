@@ -1,7 +1,9 @@
+import 'package:find_me/providers/great_places.dart';
 import 'package:find_me/utils/app_routes.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlacesListScreen extends StatelessWidget {
   const PlacesListScreen({Key? key}) : super(key: key);
@@ -23,9 +25,22 @@ class PlacesListScreen extends StatelessWidget {
     );
 
     // ignore: prefer_const_constructors
-    final body = Center(
-      // ignore: prefer_const_constructors
-      child: CircularProgressIndicator(),
+    final body = Consumer<GreatPlaces>(
+      child: Center(
+        child: Text("Nenhum local marcado"),
+        ),
+      builder: (ctx, greatPlaces, ch) => greatPlaces.itemsCount == 0 ? ch as Widget : ListView.builder(
+        itemCount: greatPlaces.itemsCount ,
+        itemBuilder: ((context, index) => ListTile(
+            leading: CircleAvatar(
+              backgroundImage: FileImage(greatPlaces.getItemById(index).image),
+            ),
+            title: Text(greatPlaces.getItemById(index).title),
+            onTap: (){},
+          )
+        ),
+      ),
+
     );
 
     return Scaffold(
